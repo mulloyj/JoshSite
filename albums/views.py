@@ -6,6 +6,7 @@ from django.views import generic
 
 from .models import Album
 
+from albums.updateCurrentAlbum import current_album
 
 # Create your views here.
 class AlbumIndexView(generic.ListView):
@@ -21,7 +22,7 @@ class AlbumIndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last 5 albums"""
-        return Album.objects.order_by('date_listened_to')[:5]
+        return Album.objects.order_by('-date_listened_to')[:5]
 
 
 class AlbumInfoView(generic.DetailView):
@@ -33,3 +34,17 @@ class AlbumInfoView(generic.DetailView):
     # return render(request, 'albums/album_info.html', {'album': album})
     model = Album
     template_name = 'albums/album_info.html'
+
+
+class CurrentAlbumView(generic.ListView):
+    current_album = current_album()
+    if current_album is not None:
+        current_album.save()
+    context_object_name = 'current_album'
+    template_name = 'albums/current_album.html'
+
+    def get_queryset(self):
+        if Album.objects.count() is not 0:
+            return Album.objects.order_by('-date_listened_to')[0]
+        else:
+            return []

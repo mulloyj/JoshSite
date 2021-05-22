@@ -1,0 +1,9 @@
+{% if current_album %}
+    <h1>TODAYS ALBUM</h1>
+    <h2>{{ current_album.title }}</h2>
+    <p>{{ current_album.artist_name }}</p>
+    <p>{{ current_album.date_listened_to }}</p>
+    <a href="{{ current_album.spotify_link }}">Link</a>
+{% else %}
+    <p>There are no albums in the database</p>
+{% endif %}
