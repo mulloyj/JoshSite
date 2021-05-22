@@ -3,24 +3,23 @@ from django.utils import timezone
 
 from bs4 import BeautifulSoup
 
-import datetime
 import requests
 import re
 
 
-def update_current_album():
+def current_album():
     url = 'https://1001albumsgenerator.com/mulloy'
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
 
     title = get_album_title(soup)
-    if title != Album.objects.order_by('date_listened_to')[0]:
+    if len(Album.objects.all()) is 0 or title != Album.objects.order_by('-date_listened_to')[0].title:
         artist = get_artist_name(soup)
         link = get_spotify_link(soup)
         now = timezone.now().date()
 
         current_album = Album(title=title, artist_name=artist, spotify_link=link, date_listened_to=now)
-        current_album.save()
+        return current_album
 
 
 def get_album_title(soup):
