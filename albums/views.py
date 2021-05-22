@@ -23,7 +23,7 @@ class AlbumIndexView(generic.ListView):
 
     def get_queryset(self):
         """Return the last 5 albums"""
-        return Album.objects.order_by('date_listened_to')[:5]
+        return Album.objects.order_by('-date_listened_to')[:5]
 
 
 class AlbumInfoView(generic.DetailView):
@@ -43,4 +43,4 @@ class CurrentAlbumView(generic.ListView):
     template_name = 'albums/current_album.html'
 
     def get_queryset(self):
-        return Album.objects.order_by('date_listened_to')[0]
+        return Album.objects.order_by('-date_listened_to')[0]

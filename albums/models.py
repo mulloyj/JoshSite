@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.urls import reverse
+from django.utils.text import slugify
 
 import datetime
 
@@ -23,4 +24,8 @@ class Album(models.Model):
     def was_listened_to_recently(self):
         now = timezone.now()
         return (now - datetime.timedelta(days=7)).date() <= self.date_listened_to <= now.date()
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super(Album, self).save(*args, **kwargs)
 
