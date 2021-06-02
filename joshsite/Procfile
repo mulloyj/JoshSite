@@ -1,0 +1,1 @@
+web: gunicorn joshsite.wsgi --log-file -
